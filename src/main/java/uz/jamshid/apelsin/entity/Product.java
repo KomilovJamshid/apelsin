@@ -27,9 +27,8 @@ public class Product {
     @Column(precision = 6, scale = 2)
     private Double price;
 
-    @Size(max = 1024)
-    @Column
-    private String photo;
+    @OneToOne
+    private Attachment photo;
 
     @ManyToOne
     private Category category;
