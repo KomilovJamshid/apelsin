@@ -25,17 +25,4 @@ public class CustomerController {
         ApiResponse apiResponse = customerService.getCustomersWithoutOrders();
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
-
-    /**
-     * 5.	ID and name of customers and the date of their last order. For customers who did not
-     * place any orders, no rows must be returned. For each customer who placed more than
-     * one order on the date of their most recent order, only one row must be returned.
-     *
-     * @return ApiResponse
-     */
-    @GetMapping("/customers_last_orders")
-    public HttpEntity<?> getCustomersLastOrders() {
-        ApiResponse apiResponse = customerService.getCustomersLastOrders();
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-    }
 }

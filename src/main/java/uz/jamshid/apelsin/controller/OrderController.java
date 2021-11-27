@@ -28,6 +28,19 @@ public class OrderController {
     }
 
     /**
+     * 5.	ID and name of customers and the date of their last order. For customers who did not
+     * place any orders, no rows must be returned. For each customer who placed more than
+     * one order on the date of their most recent order, only one row must be returned.
+     *
+     * @return ApiResponse
+     */
+    @GetMapping("/customers_last_order")
+    public HttpEntity<?> getCustomersLastOrders() {
+        ApiResponse apiResponse = orderService.getCustomersLastOrders();
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    /**
      * 9.	Total number of orders placed in 2016 by customers of each country. If all customers
      * from a specific country did not place any orders in 2016, the country will not appear in
      * the output.

@@ -9,9 +9,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvoiceDto {
-    private Double amount;
-    private Date issued;
-    private Date due;
-    private Integer orderId;
+public class CustomerLastOrderDto {
+    private Integer customerId;
+    private String name;
+    private Date lastOrderDate;
 }
