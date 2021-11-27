@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OverpaidInvoiceDto {
-    private Integer invoiceId;
-    private Double reimburseAmount;
+public class OrdersWithoutInvoiceDto {
+    private Integer orderId;
+    private Date orderDate;
+    private Double totalPrice;
 }

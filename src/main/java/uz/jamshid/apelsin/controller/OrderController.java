@@ -52,17 +52,4 @@ public class OrderController {
         ApiResponse apiResponse = orderService.getNumberOfProductsInYear();
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
-
-    /**
-     * 10.	For each order without invoice, list its ID, the date it was placed and the total price of the
-     * products in its detail, taking into account the quantity of each ordered product and its unit
-     * price. Orders without detail must not be included in the answers.
-     *
-     * @return ApiResponse
-     */
-    @GetMapping("/orders_without_invoices")
-    public HttpEntity<?> getOrdersWithoutInvoices() {
-        ApiResponse apiResponse = orderService.getOrdersWithoutInvoices();
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-    }
 }

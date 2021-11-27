@@ -12,22 +12,4 @@ import java.util.Set;
 public class ProductService {
     @Autowired
     ProductRepository productRepository;
-
-    public ApiResponse getHighDemandProducts() {
-        try {
-            Set<Product> highDemandProduct = productRepository.getHighDemandProduct();
-            return new ApiResponse("High demand products", true, highDemandProduct);
-        } catch (Exception exception) {
-            return new ApiResponse("Exception occurred", false);
-        }
-    }
-
-    public ApiResponse getBulkProducts() {
-        try {
-            Set<Product> bulkProducts = productRepository.getBulkProducts();
-            return new ApiResponse("Bulk products", true, bulkProducts);
-        } catch (Exception exception) {
-            return new ApiResponse("Exception occurred", false);
-        }
-    }
 }

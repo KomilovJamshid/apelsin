@@ -20,11 +20,4 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
             "         join orders o on i.order_id = o.id\n" +
             "where issued < o.date", nativeQuery = true)
     Set<Invoice> getWrongDateInvoice();
-
-    @Query(value = "select p.invoice_id, sum(p.amount) as total_payment, i.amount, sum(p.amount - i.amount) as reumberse_amount\n" +
-            "from invoice i\n" +
-            "         join payment p on i.id = p.invoice_id\n" +
-            "GROUP BY p.invoice_id, i.amount\n" +
-            "HAVING sum(p.amount - i.amount) != 0", nativeQuery = true)
-    Set<OverpaidInvoiceDto> getOverpaidInvoices();
 }

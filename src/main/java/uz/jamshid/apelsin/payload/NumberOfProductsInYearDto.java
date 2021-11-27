@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OverpaidInvoiceDto {
-    private Integer invoiceId;
-    private Double reimburseAmount;
+public class NumberOfProductsInYearDto {
+    private Integer orderId;
+    private String country;
 }

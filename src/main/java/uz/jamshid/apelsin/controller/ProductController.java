@@ -14,30 +14,4 @@ import uz.jamshid.apelsin.service.ProductService;
 public class ProductController {
     @Autowired
     ProductService productService;
-
-    /**
-     * 7.	Products that were ordered more than 10 times in total, by taking into account the
-     * quantities in which they appear in the order details. Return the product code and the
-     * total number of times it was ordered.
-     *
-     * @return ApiResponse
-     */
-    @GetMapping("/high_demand_product")
-    public HttpEntity<?> getHighDemandProducts() {
-        ApiResponse apiResponse = productService.getHighDemandProducts();
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-    }
-
-    /**
-     * 8.	Products that are usually ordered in bulk: whenever one of these products is ordered, it
-     * is ordered in a quantity that on average is equal to or greater than 8. For each such
-     * product, return product code and price.
-     *
-     * @return ApiResponse
-     */
-    @GetMapping("/bulk_products")
-    public HttpEntity<?> getBulkProducts() {
-        ApiResponse apiResponse = productService.getBulkProducts();
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-    }
 }

@@ -49,13 +49,4 @@ public class InvoiceService {
         wrongDateInvoiceDto.setOrderId(invoice.getOrder().getId());
         return wrongDateInvoiceDto;
     }
-
-    public ApiResponse getOverpaidInvoices() {
-        try {
-            Set<OverpaidInvoiceDto> overpaidInvoices = invoiceRepository.getOverpaidInvoices();
-            return new ApiResponse("Overpaid invoices", true, overpaidInvoices);
-        } catch (Exception exception) {
-            return new ApiResponse("Exception occurred", false);
-        }
-    }
 }

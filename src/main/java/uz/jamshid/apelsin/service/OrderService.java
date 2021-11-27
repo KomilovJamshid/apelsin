@@ -7,6 +7,7 @@ import uz.jamshid.apelsin.entity.Customer;
 import uz.jamshid.apelsin.entity.Order;
 import uz.jamshid.apelsin.payload.ApiResponse;
 import uz.jamshid.apelsin.payload.CustomerLastOrderDto;
+import uz.jamshid.apelsin.payload.NumberOfProductsInYearDto;
 import uz.jamshid.apelsin.repository.OrderRepository;
 
 import java.util.Set;
@@ -50,19 +51,20 @@ public class OrderService {
 
     public ApiResponse getNumberOfProductsInYear() {
         try {
-            Set<Order> numberOfProductsInYear = orderRepository.getNumberOfProductsInYear();
-            return new ApiResponse("Number of products in year", true, numberOfProductsInYear);
+            Set<NumberOfProductsInYearDto> productsInYearDtoSet = orderRepository.getNumberOfProductsInYear()
+                    .stream()
+                    .map(this::convertNumberOfProductsInYearDto)
+                    .collect(Collectors.toSet());
+            return new ApiResponse("Number of products in year", true, productsInYearDtoSet);
         } catch (Exception exception) {
             return new ApiResponse("Exception occurred", false);
         }
     }
 
-    public ApiResponse getOrdersWithoutInvoices() {
-        try {
-            Set<Order> ordersWithoutInvoices = orderRepository.getOrdersWithoutInvoices();
-            return new ApiResponse("Orders without invoices", true, ordersWithoutInvoices);
-        } catch (Exception exception) {
-            return new ApiResponse("Exception occurred", false);
-        }
+    private NumberOfProductsInYearDto convertNumberOfProductsInYearDto(Order order) {
+        NumberOfProductsInYearDto numberOfProducts = new NumberOfProductsInYearDto();
+        numberOfProducts.setOrderId(order.getId());
+        numberOfProducts.setCountry(order.getCustomer().getCountry());
+        return numberOfProducts;
     }
 }
