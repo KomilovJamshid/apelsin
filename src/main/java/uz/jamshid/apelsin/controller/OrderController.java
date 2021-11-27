@@ -26,4 +26,30 @@ public class OrderController {
         ApiResponse apiResponse = orderService.getOrdersWithoutDetails();
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+    /**
+     * 9.	Total number of orders placed in 2016 by customers of each country. If all customers
+     * from a specific country did not place any orders in 2016, the country will not appear in
+     * the output.
+     *
+     * @return ApiResponse
+     */
+    @GetMapping("/number_of_products_in_year")
+    public HttpEntity<?> getNumberOfProductsInYear() {
+        ApiResponse apiResponse = orderService.getNumberOfProductsInYear();
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
+    /**
+     * 10.	For each order without invoice, list its ID, the date it was placed and the total price of the
+     * products in its detail, taking into account the quantity of each ordered product and its unit
+     * price. Orders without detail must not be included in the answers.
+     *
+     * @return ApiResponse
+     */
+    @GetMapping("/orders_without_invoices")
+    public HttpEntity<?> getOrdersWithoutInvoices() {
+        ApiResponse apiResponse = orderService.getOrdersWithoutInvoices();
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
 }

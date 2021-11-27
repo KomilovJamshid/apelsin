@@ -13,7 +13,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     @Query(value = "select * from invoice where issued > due", nativeQuery = true)
     Set<Invoice> getExpiredInvoices();
 
-    @Query(value = "select i.id, i.issued, i.amount, i.due, order_id, o.date\n" +
+    @Query(value = "select i.id, i.issued, order_id, o.date\n" +
             "from invoice i\n" +
             "         join orders o on i.order_id = o.id\n" +
             "where issued < o.date", nativeQuery = true)

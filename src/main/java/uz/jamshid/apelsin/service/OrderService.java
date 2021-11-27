@@ -21,4 +21,22 @@ public class OrderService {
             return new ApiResponse("Exception occurred", false);
         }
     }
+
+    public ApiResponse getNumberOfProductsInYear() {
+        try {
+            Set<Order> numberOfProductsInYear = orderRepository.getNumberOfProductsInYear();
+            return new ApiResponse("Number of products in year", true, numberOfProductsInYear);
+        } catch (Exception exception) {
+            return new ApiResponse("Exception occurred", false);
+        }
+    }
+
+    public ApiResponse getOrdersWithoutInvoices() {
+        try {
+            Set<Order> ordersWithoutInvoices = orderRepository.getOrdersWithoutInvoices();
+            return new ApiResponse("Orders without invoices", true, ordersWithoutInvoices);
+        } catch (Exception exception) {
+            return new ApiResponse("Exception occurred", false);
+        }
+    }
 }

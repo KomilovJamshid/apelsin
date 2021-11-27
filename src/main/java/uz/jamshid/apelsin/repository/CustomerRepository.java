@@ -16,7 +16,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
             "where o.date NOT BETWEEN '2016-1-1' AND '2016-12-31'", nativeQuery = true)
     Set<Customer> getCustomerWithoutOrders();
 
-    @Query(value = "select *\n" +
+    @Query(value = "select c.id, c.name, o.date\n" +
             "from customer c\n" +
             "         join orders o on c.id = o.customer_id\n" +
             "    and o.id = (\n" +
