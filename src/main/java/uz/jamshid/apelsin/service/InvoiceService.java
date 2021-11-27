@@ -30,4 +30,13 @@ public class InvoiceService {
             return new ApiResponse("Exception occurred", false);
         }
     }
+
+    public ApiResponse getOverpaidInvoices() {
+        try {
+            Set<Invoice> overpaidInvoices = invoiceRepository.getOverpaidInvoices();
+            return new ApiResponse("Overpaid invoices", true, overpaidInvoices);
+        } catch (Exception exception) {
+            return new ApiResponse("Exception occurred", false);
+        }
+    }
 }

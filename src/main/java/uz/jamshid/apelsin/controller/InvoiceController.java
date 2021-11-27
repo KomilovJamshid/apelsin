@@ -39,4 +39,17 @@ public class InvoiceController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    /**
+     * 6.	Invoices that have been overpaid. Observe that there may be more than one payment
+     * referring to the same invoice. Return the invoice number and the amount that should be
+     * reimbursed.
+     *
+     * @return ApiResponse
+     */
+    @GetMapping("/overpaid_invoices")
+    public HttpEntity<?> getOverpaidInvoices() {
+        ApiResponse apiResponse = invoiceService.getOverpaidInvoices();
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+    }
+
 }
