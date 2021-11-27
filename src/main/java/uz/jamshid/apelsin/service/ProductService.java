@@ -21,4 +21,13 @@ public class ProductService {
             return new ApiResponse("Exception occurred", false);
         }
     }
+
+    public ApiResponse getBulkProducts() {
+        try {
+            Set<Product> bulkProducts = productRepository.getBulkProducts();
+            return new ApiResponse("Bulk products", true, bulkProducts);
+        } catch (Exception exception) {
+            return new ApiResponse("Exception occurred", false);
+        }
+    }
 }

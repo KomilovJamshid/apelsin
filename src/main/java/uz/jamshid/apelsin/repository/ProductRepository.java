@@ -16,4 +16,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "GROUP BY d.product_id\n" +
             "HAVING sum(d.quantity) > 10", nativeQuery = true)
     Set<Product> getHighDemandProduct();
+
+    @Query(value = "select d.product_id, p.price\n" +
+            "from product p\n" +
+            "        join detail d on p.id = d.product_id\n" +
+            "where d.quantity >= 8", nativeQuery = true)
+    Set<Product> getBulkProducts();
 }
