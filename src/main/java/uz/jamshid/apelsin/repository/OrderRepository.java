@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import uz.jamshid.apelsin.entity.Order;
 
 
+import javax.persistence.Tuple;
 import java.util.Set;
 
 @Repository
@@ -30,10 +31,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "    )", nativeQuery = true)
     Set<Order> getCustomersLastOrders();
 
-    @Query(value = "select *\n" +
+    @Query(value = "select count(o.id), country\n" +
             "from orders o\n" +
             "         join customer c on o.customer_id = c.id\n" +
             "where o.date BETWEEN '2016-1-1' AND '2016-12-31'\n" +
-            "group by c.country, o.id, date, customer_id, c.id, address, name, phone", nativeQuery = true)
-    Set<Order> getNumberOfProductsInYear();
+            "group by country", nativeQuery = true)
+    Set<Tuple> getNumberOfProductsInYear();
 }

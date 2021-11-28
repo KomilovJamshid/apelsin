@@ -10,6 +10,8 @@ import uz.jamshid.apelsin.payload.CustomerLastOrderDto;
 import uz.jamshid.apelsin.payload.NumberOfProductsInYearDto;
 import uz.jamshid.apelsin.repository.OrderRepository;
 
+import javax.persistence.Tuple;
+import java.math.BigInteger;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,20 +53,16 @@ public class OrderService {
 
     public ApiResponse getNumberOfProductsInYear() {
         try {
-            Set<NumberOfProductsInYearDto> productsInYearDtoSet = orderRepository.getNumberOfProductsInYear()
-                    .stream()
-                    .map(this::convertNumberOfProductsInYearDto)
+            Set<Tuple> productDto = orderRepository.getNumberOfProductsInYear();
+            Set<NumberOfProductsInYearDto> productsInYearDtoSet = productDto.stream()
+                    .map(t -> new NumberOfProductsInYearDto(
+                            t.get(0, BigInteger.class),
+                            t.get(1, String.class)
+                    ))
                     .collect(Collectors.toSet());
             return new ApiResponse("Number of products in year", true, productsInYearDtoSet);
         } catch (Exception exception) {
             return new ApiResponse("Exception occurred", false);
         }
-    }
-
-    private NumberOfProductsInYearDto convertNumberOfProductsInYearDto(Order order) {
-        NumberOfProductsInYearDto numberOfProducts = new NumberOfProductsInYearDto();
-        numberOfProducts.setOrderId(order.getId());
-        numberOfProducts.setCountry(order.getCustomer().getCountry());
-        return numberOfProducts;
     }
 }

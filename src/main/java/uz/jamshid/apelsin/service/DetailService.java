@@ -9,6 +9,9 @@ import uz.jamshid.apelsin.payload.HighDemandProductDto;
 import uz.jamshid.apelsin.payload.OrdersWithoutInvoiceDto;
 import uz.jamshid.apelsin.repository.DetailRepository;
 
+import javax.persistence.Tuple;
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,21 +22,16 @@ public class DetailService {
 
     public ApiResponse getHighDemandProducts() {
         try {
-            Set<HighDemandProductDto> highDemandProductDtoSet = detailRepository.getHighDemandProduct()
-                    .stream()
-                    .map(this::convertHighDemandProductDto)
-                    .collect(Collectors.toSet());
+            Set<Tuple> highDemandProduct = detailRepository.getHighDemandProduct();
+            Set<HighDemandProductDto> highDemandProductDtoSet = highDemandProduct.stream()
+                    .map(t -> new HighDemandProductDto(
+                            t.get(0, Integer.class),
+                            t.get(1, BigInteger.class)
+                    )).collect(Collectors.toSet());
             return new ApiResponse("High demand products", true, highDemandProductDtoSet);
         } catch (Exception exception) {
             return new ApiResponse("Exception occurred", false);
         }
-    }
-
-    private HighDemandProductDto convertHighDemandProductDto(Detail detail) {
-        HighDemandProductDto highDemandProductDto = new HighDemandProductDto();
-        highDemandProductDto.setProductId(detail.getProduct().getId());
-        highDemandProductDto.setQuantity(detail.getQuantity());
-        return highDemandProductDto;
     }
 
     public ApiResponse getBulkProducts() {
@@ -57,21 +55,16 @@ public class DetailService {
 
     public ApiResponse getOrdersWithoutInvoices() {
         try {
-            Set<OrdersWithoutInvoiceDto> ordersWithoutInvoiceDtoSet = detailRepository.getOrdersWithoutInvoices()
-                    .stream()
-                    .map(this::convertOrdersWithoutInvoiceDto)
-                    .collect(Collectors.toSet());
-            return new ApiResponse("Orders without invoices", true, ordersWithoutInvoiceDtoSet);
+            Set<Tuple> ordersWithoutInvoices = detailRepository.getOrdersWithoutInvoices();
+            Set<OrdersWithoutInvoiceDto> ordersWithoutInvoiceDtoSet = ordersWithoutInvoices.stream()
+                    .map(t -> new OrdersWithoutInvoiceDto(
+                            t.get(0, Integer.class),
+                            t.get(1, Date.class),
+                            t.get(2, Double.class)
+                    )).collect(Collectors.toSet());
+            return new ApiResponse("Orders without invoice", true, ordersWithoutInvoiceDtoSet);
         } catch (Exception exception) {
             return new ApiResponse("Exception occurred", false);
         }
-    }
-
-    private OrdersWithoutInvoiceDto convertOrdersWithoutInvoiceDto(Detail detail) {
-        OrdersWithoutInvoiceDto ordersWithoutInvoiceDto = new OrdersWithoutInvoiceDto();
-        ordersWithoutInvoiceDto.setOrderId(detail.getOrder().getId());
-        ordersWithoutInvoiceDto.setOrderDate(detail.getOrder().getDate());
-        ordersWithoutInvoiceDto.setTotalPrice(detail.getQuantity() * detail.getProduct().getPrice());
-        return ordersWithoutInvoiceDto;
     }
 }
