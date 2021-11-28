@@ -33,4 +33,6 @@ public interface DetailRepository extends JpaRepository<Detail, Integer> {
             "  and d.order_id is not null\n" +
             "group by o.id, o.date", nativeQuery = true)
     Set<Tuple> getOrdersWithoutInvoices();
+
+    Detail findByOrderId(Integer order_id);
 }

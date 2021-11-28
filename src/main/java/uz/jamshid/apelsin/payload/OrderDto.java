@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NumberOfProductsInYearDto {
-    private BigInteger numberOfOrders;
-    private String country;
+public class OrderDto {
+    private Integer customerId;
+    private Date date;
 }
