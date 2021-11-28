@@ -3,21 +3,16 @@ package uz.jamshid.apelsin.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uz.jamshid.apelsin.entity.Customer;
-import uz.jamshid.apelsin.entity.Detail;
-import uz.jamshid.apelsin.entity.Invoice;
-import uz.jamshid.apelsin.entity.Order;
+import uz.jamshid.apelsin.entity.*;
 import uz.jamshid.apelsin.payload.ApiResponse;
 import uz.jamshid.apelsin.payload.CustomerLastOrderDto;
 import uz.jamshid.apelsin.payload.NumberOfProductsInYearDto;
 import uz.jamshid.apelsin.payload.OrderDto;
-import uz.jamshid.apelsin.repository.CustomerRepository;
-import uz.jamshid.apelsin.repository.DetailRepository;
-import uz.jamshid.apelsin.repository.InvoiceRepository;
-import uz.jamshid.apelsin.repository.OrderRepository;
+import uz.jamshid.apelsin.repository.*;
 
 import javax.persistence.Tuple;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -37,6 +32,8 @@ public class OrderService {
     InvoiceRepository invoiceRepository;
     @Autowired
     DetailRepository detailRepository;
+    @Autowired
+    ProductRepository productRepository;
 
     public ApiResponse getOrdersWithoutDetails() {
         try {
@@ -85,7 +82,7 @@ public class OrderService {
     public ApiResponse addOrder(OrderDto orderDto) {
         try {
             Order order = new Order();
-            order.setDate(orderDto.getDate());
+            order.setDate(new Date());
 
             Optional<Customer> optionalCustomer = customerRepository.findById(orderDto.getCustomerId());
             if (!optionalCustomer.isPresent())
@@ -94,11 +91,22 @@ public class OrderService {
             order.setCustomer(optionalCustomer.get());
             orderRepository.save(order);
 
+            Detail detail = new Detail();
+            detail.setOrder(order);
+            detail.setQuantity(orderDto.getQuantity());
+
+            Optional<Product> optionalProduct = productRepository.findById(orderDto.getProductId());
+            if (!optionalProduct.isPresent())
+                return new ApiResponse("FAILED. Product not found", false);
+
+            detail.setProduct(optionalProduct.get());
+            detailRepository.save(detail);
+
             Invoice invoice = new Invoice();
             invoice.setOrder(order);
-            invoice.setIssued(orderDto.getDate());
-            invoice.setDue(orderDto.getDate());
-            invoice.setAmount((double) Math.round(Math.random() * 100));
+            invoice.setIssued(new Date());
+            invoice.setDue(new Date());
+            invoice.setAmount(detail.getQuantity() * detail.getProduct().getPrice());
             invoiceRepository.save(invoice);
 
             return new ApiResponse("SUCCESS", true, "invoice_number: " + invoice.getId());

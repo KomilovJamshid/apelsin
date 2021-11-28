@@ -45,13 +45,13 @@ public class PaymentService {
     public ApiResponse makePayment(PaymentDto paymentDto) {
         try {
             Payment payment = new Payment();
-            payment.setAmount((double) Math.round(Math.random() * 100));
             payment.setTime(Timestamp.valueOf(LocalDateTime.now()));
 
             Optional<Invoice> optionalInvoice = invoiceRepository.findById(paymentDto.getInvoiceId());
             if (!optionalInvoice.isPresent())
                 return new ApiResponse("FAILED. Invoice not found", false);
 
+            payment.setAmount(optionalInvoice.get().getAmount());
             payment.setInvoice(optionalInvoice.get());
             paymentRepository.save(payment);
             return new ApiResponse("SUCCESS", true, payment);
