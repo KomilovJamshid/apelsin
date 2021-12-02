@@ -10,6 +10,7 @@ import uz.jamshid.apelsin.payload.PaymentDto;
 import uz.jamshid.apelsin.repository.InvoiceRepository;
 import uz.jamshid.apelsin.repository.PaymentRepository;
 
+import javax.persistence.Tuple;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,21 +26,16 @@ public class PaymentService {
 
     public ApiResponse getOverpaidInvoices() {
         try {
-            Set<OverpaidInvoiceDto> overpaidInvoiceDtoSet = paymentRepository.getOverpaidInvoices()
-                    .stream()
-                    .map(this::convertOverpaidInvoiceDto)
-                    .collect(Collectors.toSet());
+            Set<Tuple> overpaidInvoices = paymentRepository.getOverpaidInvoices();
+            Set<OverpaidInvoiceDto> overpaidInvoiceDtoSet = overpaidInvoices.stream()
+                    .map(t -> new OverpaidInvoiceDto(
+                            t.get(0, Integer.class),
+                            t.get(1, Double.class)
+                    )).collect(Collectors.toSet());
             return new ApiResponse("Overpaid invoices", true, overpaidInvoiceDtoSet);
         } catch (Exception exception) {
             return new ApiResponse("Exception occurred", false);
         }
-    }
-
-    private OverpaidInvoiceDto convertOverpaidInvoiceDto(Payment payment) {
-        OverpaidInvoiceDto overpaidInvoiceDto = new OverpaidInvoiceDto();
-        overpaidInvoiceDto.setInvoiceId(payment.getInvoice().getId());
-        overpaidInvoiceDto.setReimburseAmount(payment.getAmount() - payment.getInvoice().getAmount());
-        return overpaidInvoiceDto;
     }
 
     public ApiResponse makePayment(PaymentDto paymentDto) {
